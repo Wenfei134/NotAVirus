@@ -6,7 +6,7 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route('/prediction')
+@app.route('/prediction', methods=['POST', 'GET'])
 def prediction():  
     if request.method == 'POST': 
         audio = request.files['audiofile']
