@@ -3,6 +3,8 @@ import os
 import sys
 POS_DIR = "./positive_Covid-19"
 
+print(cv2.getBuildInformation())
+
 for image in os.listdir(POS_DIR):
     path = os.path.join(POS_DIR, image)
     print(path)

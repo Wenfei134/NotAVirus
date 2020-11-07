@@ -4,6 +4,7 @@ import cv2
 import os
 import sys
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 # Change
 EPOCHS = 10 # how many times to train
@@ -11,8 +12,8 @@ EPOCHS = 10 # how many times to train
 #Input Size
 WIDTH = 320
 HEIGHT = 240
-POS_DIR = "./dir/negative_Covid-19"
-NEG_DIR = "./dir/positive_Covid-19"
+POS_DIR = "./negative_Covid-19"
+NEG_DIR = "./positive_Covid-19"
 
 def main():
     
