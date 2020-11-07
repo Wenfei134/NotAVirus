@@ -1,4 +1,7 @@
 # Python Gitignore
+/negative_Covid-19
+/positive_Covid-19
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
