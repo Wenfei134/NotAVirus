@@ -1,4 +1,5 @@
 import React from "react";
+import Hello from "./Components/Hello";
 import logo from './logo.svg';
 import './styles.css';
 
@@ -21,6 +22,7 @@ function App() {
         </div>
         
     </div>
+    <Hello/>
   </React.Fragment>
   );
 }
