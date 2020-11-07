@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+:root {
+    --accent: #EA918D;
+    --accentHover: #DE8A86;
+    --dark: #304659;
+    --dark80: rgba(48, 70, 89, .8);
+    --dark60: rgba(48, 70, 89, .6);
+    --dark20: rgba(48, 70, 89, .2);
+    --light: #F5F9FC;
+    --transition: alll 0.3s ease 0s;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body{
+    font-family: 'Cairo', sans-serif;
+    height: 100%;
+    overflow: auto;
+    background: 
+        linear-gradient(
+            var(--light),
+            var(--dark20)
+        ),
+        url(https://www.brookings.edu/wp-content/uploads/2020/04/AdobeStock_332298426.jpeg)
+        no-repeat
+        55% 40%;
+}
+
+a, button, .logo {
+    color: var(--light);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.header{
+    position: fixed;
+    width: 100%;
+    padding: 1em;
+    background-color: var(--dark);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+#homepage{
+    height: 100%; 
+    display: grid;
+    grid-template-columns: minmax( 60px, 1fr) repeat(6, minmax(50px, 190px)) minmax(60px, 1fr);
+    color: var(--light);
+}
+
+.right{
+    grid-column: 2 / span 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.right :first-child {
+    margin-top: auto;
+}
+
+.right :last-child{
+    margin-bottom: auto;
+}
+
+
+.header a{
+    margin-right: 2em;
+}
+

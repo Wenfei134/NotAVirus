@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotAVirus</title>
+    <link href="../css/styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+
+    <div class="header">
+        <a href="./SignIn">Sign In</a>
+        <a href="./Register">Register</a>
+    </div>
+
+    <div id="homepage">
+        <div class="right">
+            <h1>The future of medicine at your fingertips</h1>
+            <p>Submit a cough</p>
+            <form action="./prediction" method="POST" enctype="multipart/form-data">
+                <input type="file" name="audiofile">
+                <input type="submit">
+            </form>
+        </div>
+        
+    </div>
+
+</body>
+</html>
+
