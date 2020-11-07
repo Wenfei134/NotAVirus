@@ -7,7 +7,9 @@ def home():
     return render_template('index.html')
 
 @app.route('/prediction')
-def prediction():
-    return render_template('prediction.html')
+def prediction():  
+    if request.method == 'POST': 
+        audio = request.files['audiofile']
+        return render_template('prediction.html')
 
 
