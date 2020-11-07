@@ -10,6 +10,7 @@ def home():
 def prediction():  
     if request.method == 'POST': 
         audio = request.files['audiofile']
+        print(audio)
         return render_template('prediction.html')
 
 
