@@ -83,12 +83,10 @@ def build_model(n_labels):
     INPUTSHAPE = (HEIGHT, WIDTH, 1)
     model = models.Sequential([
         layers.MaxPool2D((2,2), input_shape=INPUTSHAPE),
+        layers.Conv2D(1, (5,5), padding='same', activation='relu'),
+        layers.Conv2D(1, (5,5), padding='same', activation='relu'),
         layers.Conv2D(16, (5,5), padding='same', activation='relu'),
         layers.Conv2D(16, (5,5), padding='same', activation='relu'),
-        layers.MaxPool2D((2,2)),
-        layers.Dropout(0.15),
-        layers.Conv2D(32, (5,5), padding='same', activation='relu'),
-        layers.Conv2D(32, (5,5), padding='same', activation='relu'),
         layers.MaxPool2D((2,2)),
         layers.Dropout(0.15),
         layers.Flatten(),
@@ -101,7 +99,7 @@ def build_model(n_labels):
     return model
 
 def train_model(model, x_test, y_test, x_train, y_train):
-    history = model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test))
+    history = model.fit(x_train, y_train, epochs=100, validation_data=(x_test, y_test))
     plt.plot(history.history['accuracy'], label='accuracy')
     plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
     plt.xlabel('Epoch')
