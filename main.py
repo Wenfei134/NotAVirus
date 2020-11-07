@@ -6,7 +6,7 @@ import cv2
 import os
 import sys
 from tqdm import tqdm
-from matplotlib.pyplot import plt
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 # import matplotlib.pyplot as plt
 
@@ -14,8 +14,8 @@ from sklearn.model_selection import train_test_split
 EPOCHS = 10 # how many times to train
 
 #Input Size
-WIDTH = 320
-HEIGHT = 240
+WIDTH = 30
+HEIGHT = 30
 POS_DIR = "./negative_Covid-19"
 NEG_DIR = "./positive_Covid-19"
 
@@ -82,7 +82,8 @@ def build_model(n_labels):
     """
     INPUTSHAPE = (HEIGHT, WIDTH, 1)
     model = models.Sequential([
-        layers.Conv2D(16, (5,5), padding='same', activation='relu', input_shape=INPUTSHAPE),
+        layers.MaxPool2D((2,2), input_shape=INPUTSHAPE),
+        layers.Conv2D(16, (5,5), padding='same', activation='relu'),
         layers.Conv2D(16, (5,5), padding='same', activation='relu'),
         layers.MaxPool2D((2,2)),
         layers.Dropout(0.15),
@@ -107,6 +108,7 @@ def train_model(model, x_test, y_test, x_train, y_train):
     plt.ylabel('Accuracy')
     plt.ylim([0.5, 1])
     plt.legend(loc='lower right')
+    plt.show()
 
     test_loss, test_acc = model.evaluate(x_test,  y_test, verbose=2)
 
