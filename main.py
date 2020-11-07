@@ -4,7 +4,7 @@ import cv2
 import os
 import sys
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 # Change
 EPOCHS = 10 # how many times to train
@@ -19,10 +19,10 @@ def main():
     
     # Split images into testing/data
     images, labels = load_images(POS_DIR, NEG_DIR)
-    # labels = tf.keras.utils.to_categorical(labels) 
-    # images = np.array(images)
-    # labels = np.array(labels)
-    # X_train, X_test, Y_train, Y_test = train_test_split(images, labels, test_size=0.2)
+    labels = tf.keras.utils.to_categorical(labels) 
+    images = np.array(images)
+    labels = np.array(labels)
+    X_train, X_test, Y_train, Y_test = train_test_split(images, labels, test_size=0.2)
 
     # print(X_train)
 
@@ -47,25 +47,25 @@ def load_images(pos_dir, neg_dir):
     # Load postive images with opencv, and label as 1
     for image in os.listdir(pos_dir):
         path = os.path.join(pos_dir, image)
-        print(path)
-        img = cv2.imread(path) #def: read in 
+        img = cv2.imread(path, cv2.IMREAD_GRAYSCALE) #def: read in 
         try:
-            # resize = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR) #Can mess around with WIDTH, HEIGHT
-            resize = cv2.resize(img, (10,10))
+            resize = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR) #Can mess around with WIDTH, HEIGHT
             images.append(resize)
             labels.append(1)
         except Exception as e:
-            print(img.shape())
             print(str(e))
     
     # Load negative images, label = 0
-    # for image in os.listdir(neg_dir):
-    #     path = os.path.join(neg_dir, image)
-    #     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE) #def: read in
-    #     resize = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR) #Can mess around with WIDTH, HEIGHT
-    #     images.append(resize)
-    #     labels.append(0)
-    
+    for image in os.listdir(neg_dir):
+        path = os.path.join(neg_dir, image)
+        img = cv2.imread(path, cv2.IMREAD_GRAYSCALE) #def: read in
+        try:
+            resize = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR) #Can mess around with WIDTH, HEIGHT
+            images.append(resize)
+            labels.append(0)
+        except Exception as e:
+            print(str(e))    
+
     return (images, labels) #numpy arrays
 
 
