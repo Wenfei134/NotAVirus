@@ -6,6 +6,10 @@ from scipy import ndimage
 import matplotlib.pyplot as plt
 import os
 
+#Past issues (now fixed): positive_0_318.jpg - some skewing
+#negative_0_992, negative_0_1867, negative_0_2476 is blank, negative_0_2553 very skewed, negative_0_3283 extreme skew, 
+#negative_0_3721 some skew, negative_0_4428 a lot, negative_0_6384 wide skew, negative_0_7078 little, negative_0_7944 some, 
+
 # Define size of input images
 WIDTH_IN = 432
 HEIGHT_IN = 288
@@ -19,6 +23,13 @@ POS_DIR_OUT = "./proc_positive_Covid-19"
 NEG_DIR_OUT = "./proc_negative_Covid-19"
   
 def rotate_and_save_img(img, img_name, pts1, pts2):
+
+    # # Cannot rotate
+    # if (np.shape(pts1)[0] < 4 or len(np.unique(pts1)) != len(pts1)): #Checks if <4 pts, or any duplicate pts
+    #     # Know we can't rotate.
+    #     # don't output
+    #     return
+
     rows,cols,ch = img.shape
 
     # Tranformation matrix
@@ -44,7 +55,7 @@ def get_four_corners(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
         
     # Find corners (may have more than 4)
-    found_corners = cv2.goodFeaturesToTrack(gray, 27, 0.01, 10) 
+    found_corners = cv2.goodFeaturesToTrack(gray, 40, 0.0001, 50) #was 27, 0.01, 10
     found_corners = np.int0(found_corners) 
         
     # Visual: Circle the corners
@@ -76,11 +87,11 @@ def get_four_corners(img):
         final_corners = np.vstack((final_corners, min_pt)) # Found closest point for current corner
 
     print(np.shape(final_corners))
+    # print(final_corners[:])
+
     # Note: The final_corners array must have have the following ordering: Top Left, Top Right, Bottom Left, Bottom Right
     # in order for rotate_img to work properly. 
     # We make the assumption that any skewing in images is less than 45 degrees. (Else, the absolute distance will not be accurate)
-    print(final_corners[:])
-    
     return final_corners, ref_corners
 
 def main():
@@ -94,7 +105,6 @@ def main():
             img = cv2.imread(path)
             pts1, pts2 = get_four_corners(img)
             rotate_and_save_img(img, img_name, pts1, pts2)
-            break
 
 
 if __name__ == "__main__":
