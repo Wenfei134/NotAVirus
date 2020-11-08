@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 # import matplotlib.pyplot as plt
 from scipy import signal
-from scipy.io import wavfile
+import wave
 
 
 # Change
@@ -113,8 +113,8 @@ def train_model(model, x_test, y_test, x_train, y_train):
 
     test_loss, test_acc = model.evaluate(x_test,  y_test, verbose=2)
 
-def getSpectrogram( wav_file ):
-    wav_file = wav_file.open( wav_file )
+def getSpectrogram( file ):
+    wav_file = wave.open( file )
     frameRate = wav_file.getframerate()
     totalFrames = wav_file.getnframes()
     #get first three seconds or entire file, whichever is shorter
