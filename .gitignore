@@ -1,6 +1,9 @@
 # Python Gitignore
 /negative_Covid-19
 /positive_Covid-19
+/proc_negative_Covid-19
+/proc_positive_Covid-19
+/problematic_images
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
