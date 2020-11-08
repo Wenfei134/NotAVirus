@@ -16,13 +16,13 @@ NEG_DIR = "./proc_negative_Covid-19"
 
 # Uses the serialized model generated from main.py to classify mel spectrograms.
 # Will return a label representing covid/not covid
-def classify_image(filepath):
+def classify_image(test_input):
     final_pred = {}
     # Load in the model with a test sample
     reconstructed_model = tf.keras.models.load_model("finalized_model_c") #finalized_model_c is the best so far
-    img = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
-    test_input = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR)
-    test_input = np.array(test_input)
+    # img = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
+    # test_input = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR)
+    # test_input = np.array(
 
     test_input = test_input.reshape(1, test_input.shape[0], test_input.shape[1], 1)
     # print(test_input.shape)
