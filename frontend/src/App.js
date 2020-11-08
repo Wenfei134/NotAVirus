@@ -43,60 +43,64 @@ function App() {
         <a href="./SignIn">Sign In</a>
         <a href="./Register">Register</a>
     </div>
-    <Container className={classes.mainContainer}>
-        <form action="./prediction" method="POST" enctype="multipart/form-data">
-        <Paper elevation={3} className={classes.contentContainer}>
-          <Typography component="div" variant="h4" id="appDiv">Submit Your Cough</Typography> 
-          <div id="appDiv"> 
+    <div id="homepage">
 
-          {/* We need a for loop to constantly fetch the back end for progress */}
-          <input type="file" onChange={(e) => { 
-            setStage(1) 
-            setProgress(10);
-            let name = e.target.name;
-            let value = e.target.files[0];
-            let formData = new FormData();
-            formData.append(name, value);
-            fetch("/prediction", {
-              method: "POST",
-              body: formData,
-            }).then((res) => res.json())
-            .then((result) => {
-                setResult(result["result"]);
-                setConfidence(result["confidence"])
-            }).catch((err) => alert(err));
-            const timer = setInterval(() => {
-              let currProgress = 0;
-              
-              setProgress((prevProgress) => { 
-                if (prevProgress < 100)
-                  currProgress = prevProgress + 10
-                else return prevProgress 
-                return currProgress
-              });
-              if (currProgress === 100){ 
-                setCOVID(true);
-                setStage(2);
+
+      <Container className={classes.mainContainer}>
+          <form action="./prediction" method="POST" enctype="multipart/form-data">
+          <Paper elevation={3} className={classes.contentContainer}>
+            <Typography component="div" variant="h4" id="appDiv">Submit Your Cough</Typography> 
+            <div id="appDiv"> 
+
+            {/* We need a for loop to constantly fetch the back end for progress */}
+            <input type="file" onChange={(e) => { 
+              setStage(1) 
+              setProgress(10);
+              let name = e.target.name;
+              let value = e.target.files[0];
+              let formData = new FormData();
+              formData.append(name, value);
+              fetch("/prediction", {
+                method: "POST",
+                body: formData,
+              }).then((res) => res.json())
+              .then((result) => {
+                  setResult(result["result"]);
+                  setConfidence(result["confidence"])
+              }).catch((err) => alert(err));
+              const timer = setInterval(() => {
+                let currProgress = 0;
+                
+                setProgress((prevProgress) => { 
+                  if (prevProgress < 100)
+                    currProgress = prevProgress + 10
+                  else return prevProgress 
+                  return currProgress
+                });
+                if (currProgress === 100){ 
+                  setCOVID(true);
+                  setStage(2);
+                  clearInterval(timer);
+                }
+              }, 800);
+              return () => {
                 clearInterval(timer);
-              }
-            }, 800);
-            return () => {
-              clearInterval(timer);
-            };
-          } } className={classes.input} name="audiofile" id="contained-button-file" accept=".wav"/>
-          <label htmlFor="contained-button-file">
-            <Button variant="contained" color="primary" component="span">Upload Audio</Button>  
-          </label>          
-          <IconButton color="primary" aria-label="upload audiofile" component="span">
-            <AudiotrackIcon />
-          </IconButton>
-          </div>                    
-          { (stage === 1) && <LinearProgressionWithLabel value={progress}/> }   
-          { (stage === 2) && <Results COVIDFree={(result === "positive") ? false : true} confidence={confidence}/>}
-          </Paper>
-        </form>
-        
-    </Container>
+              };
+            } } className={classes.input} name="audiofile" id="contained-button-file" accept=".wav"/>
+            <label htmlFor="contained-button-file">
+              <Button variant="contained" color="primary" component="span">Upload Audio</Button>  
+            </label>          
+            <IconButton color="primary" aria-label="upload audiofile" component="span">
+              <AudiotrackIcon />
+            </IconButton>
+            </div>                    
+            { (stage === 1) && <LinearProgressionWithLabel value={progress}/> }   
+            { (stage === 2) && <Results COVIDFree={(result === "positive") ? false : true} confidence={confidence}/>}
+            </Paper>
+          </form>
+          
+      </Container>
+    </div>
 
   </React.Fragment>
   );
