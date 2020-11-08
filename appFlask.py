@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request
 from getSpectrogram import submitAudio
-from classify_image import classify_image
+import os
 
 app = Flask(__name__, static_folder='./frontend/build/static/', template_folder='./frontend/build/')
+app.config['UPLOAD_FOLDER'] = './'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 @app.route('/')
 def home():
@@ -11,11 +13,14 @@ def home():
 @app.route('/prediction', methods=['POST', 'GET'])
 def prediction():  
     if request.method == 'POST': 
-        audio = request.files['audiofile']
-        success = submitAudio( audio )
-        if success:
-            isCovid = classify_image( "./audio.jpg")
-        return render_template('prediction.html', isCovid=isCovid )
+        file = request.files['audiofile']
+        filename = secure_filename( file.filename )
+        path = os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save( path )
+        success = submitAudio( path )
+        if success: 
+            prediction = getPrediction( './audio.jpg' )
+        return render_template('prediction.html', prediction = prediction )
 
 
 if __name__=="__main__":
