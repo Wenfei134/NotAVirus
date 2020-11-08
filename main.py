@@ -129,7 +129,7 @@ def getSpectrogram( wav_file ):
     
     frequencies, times, spectrogram = signal.spectrogram( audio, frameRate )
     plt.imshow( spectrogram )
-    plt.savefig( "./audio.jpg" )
+    plt.savefig( "./audio.jpg", progressive=True)
     return True
 
 
