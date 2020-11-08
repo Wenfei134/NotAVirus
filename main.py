@@ -9,6 +9,9 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 # import matplotlib.pyplot as plt
+from scipy import signal
+from scipy.io import wavfile
+
 
 # Change
 EPOCHS = 10 # how many times to train
@@ -109,6 +112,28 @@ def train_model(model, x_test, y_test, x_train, y_train):
     plt.show()
 
     test_loss, test_acc = model.evaluate(x_test,  y_test, verbose=2)
+
+def getSpectrogram( wav_file ):
+    wav_file = wav_file.open( wav_file )
+    frameRate = wav_file.getframerate()
+    totalFrames = wav_file.getnframes()
+    #get first three seconds or entire file, whichever is shorter
+    framesToGet = min( frameRate * 3, totalFrames) 
+    audio = wav_file.readframes( framesToGet )
+    isMono = ( wav_file.getnchannels == 1 )
+    wav_file.close()
+
+    #can only use one channel 
+    if not isMono:
+        return False
+    
+    frequencies, times, spectrogram = signal.spectrogram( audio, frameRate )
+    plt.imshow( spectrogram )
+    plt.savefig( "./audio.jpg" )
+    return True
+
+
+
 
 if __name__ == "__main__":
     main()
