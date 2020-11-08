@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import librosa
 import librosa.display
+import cv2
+import image_preprocess as ipre
 
 def convertToMono(file): 
     sound = AudioSegment.from_wav( file )
@@ -17,7 +19,11 @@ def getMelSpectrogram(file):
     mel_spect_dB = librosa.power_to_db(mel_spect, ref=np.max)
     librosa.display.specshow(mel_spect_dB)
     plt.plot(y)
-    plt.savefig( "./audio.jpg", pil_kwargs={'progressive': True})
+    plt.savefig( "./audio.jpg", pil_kwargs={'progressive': True}, bbox_inches='tight', pad_inches=0)
+    # path = "./audio.jpg"
+    # img = cv2.imread(path)
+    # pts1, pts2 = ipre.get_four_corners(img) #Scale
+    # ipre.rotate_and_save_img(img, "audio.jpg", pts1, pts2)
     return True
 
 def submitAudio( file ):
@@ -47,3 +53,4 @@ def submitAudio( file ):
     wav_file.writeframes( data )
     return getMelSpectrogram("./audio.wav")
 
+submitAudio("Afro Blue.wav")
