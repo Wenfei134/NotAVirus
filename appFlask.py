@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from main import getSpectrogram
+from getSpectrogram import submitAudio
 
 app = Flask(__name__, static_folder='./frontend/build/static/', template_folder='./frontend/build/')
 
@@ -11,9 +11,9 @@ def home():
 def prediction():  
     if request.method == 'POST': 
         audio = request.files['audiofile']
-        success = getSpectrogram( audio )
+        success = submitAudio( audio )
         return render_template('prediction.html', output = success )
 
 
 if __name__=="__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host="127.0.0.1", port=5000)
