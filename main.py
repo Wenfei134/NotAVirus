@@ -17,10 +17,13 @@ import wave
 EPOCHS = 10 # how many times to train
 
 #Input Size
-WIDTH = 30
-HEIGHT = 30
-POS_DIR = "./negative_Covid-19"
-NEG_DIR = "./positive_Covid-19"
+WIDTH_IN = 320 #432
+HEIGHT_IN = 240 #288
+
+WIDTH = int(WIDTH_IN/2)
+HEIGHT = int(HEIGHT_IN/2)
+POS_DIR = "./proc_positive_Covid-19"
+NEG_DIR = "./proc_negative_Covid-19"
 
 def main():
     
@@ -86,30 +89,33 @@ def build_model(n_labels):
     INPUTSHAPE = (HEIGHT, WIDTH, 1)
     model = models.Sequential([
         layers.MaxPool2D((2,2), input_shape=INPUTSHAPE),
-        layers.Conv2D(1, (5,5), padding='same', activation='relu'),
-        layers.Conv2D(1, (5,5), padding='same', activation='relu'),
         layers.Conv2D(16, (5,5), padding='same', activation='relu'),
         layers.Conv2D(16, (5,5), padding='same', activation='relu'),
         layers.MaxPool2D((2,2)),
-        layers.Dropout(0.15),
+        layers.Dropout(0.2),
+        layers.Conv2D(32, (5,5), padding='same', activation='relu'),
+        layers.Conv2D(32, (5,5), padding='same', activation='relu'),
+        layers.MaxPool2D((2,2)),
+        layers.Dropout(0.2),
         layers.Flatten(),
+        layers.Dropout(0.5),
         layers.Dense(256, activation='relu'),
         layers.Dense(n_labels, activation = 'softmax')
     ])
 
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     print(model.summary())
     return model
 
 def train_model(model, x_test, y_test, x_train, y_train):
-    history = model.fit(x_train, y_train, epochs=100, validation_data=(x_test, y_test))
-    plt.plot(history.history['accuracy'], label='accuracy')
-    plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
-    plt.xlabel('Epoch')
-    plt.ylabel('Accuracy')
-    plt.ylim([0.5, 1])
-    plt.legend(loc='lower right')
-    plt.show()
+    history = model.fit(x_train, y_train, epochs=EPOCHS, validation_data=(x_test, y_test))
+    # plt.plot(history.history['accuracy'], label='accuracy')
+    # plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
+    # plt.xlabel('Epoch')
+    # plt.ylabel('Accuracy')
+    # plt.ylim([0.5, 1])
+    # plt.legend(loc='lower right')
+    # plt.show()
 
     test_loss, test_acc = model.evaluate(x_test,  y_test, verbose=2)
 
