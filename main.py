@@ -133,7 +133,9 @@ def getMelSpectrogram(file):
     mel_spect = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=32)
     mel_spect_dB = librosa.power_to_db(mel_spect, ref=np.max)
     librosa.display.specshow(mel_spect_dB)
-    plt.plot(y)
+    fig, ax = plt.subplots(figsize=(30, 50))
+    im = ax.imshow(mel_spect_dB, cmap=cm.plasma)
+    plt.show()
     plt.savefig( "./audio.jpg", pil_kwargs={'progressive': True})
     return True
 

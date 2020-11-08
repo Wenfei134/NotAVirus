@@ -8,3 +8,4 @@ flask
 librosa
 pydub
 wave
+gunicorn
