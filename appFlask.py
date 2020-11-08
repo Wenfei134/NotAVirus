@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from main import getSpectrogram
 
 app = Flask(__name__, static_folder='./frontend/build/static/', template_folder='./frontend/build/')
 
@@ -10,8 +11,8 @@ def home():
 def prediction():  
     if request.method == 'POST': 
         audio = request.files['audiofile']
-        print(audio)
-        return render_template('prediction.html')
+        success = getSpectrogram( audio )
+        return render_template('prediction.html', output = success )
 
 
 if __name__=="__main__":
