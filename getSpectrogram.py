@@ -12,9 +12,8 @@ def convertToMono(file):
 
 def getMelSpectrogram(file):
     y, sr = librosa.load(file)
-    n_fft = 2048
-
-    mel_spect = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=1024)
+    n_fft = 512
+    mel_spect = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=32)
     mel_spect_dB = librosa.power_to_db(mel_spect, ref=np.max)
     librosa.display.specshow(mel_spect_dB)
     plt.plot(y)
