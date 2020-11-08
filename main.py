@@ -8,9 +8,10 @@ import sys
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-# import matplotlib.pyplot as plt
-from scipy import signal
 import wave
+import librosa 
+import librosa.display
+from pydub import AudioSegment
 
 
 # Change
@@ -119,27 +120,49 @@ def train_model(model, x_test, y_test, x_train, y_train):
 
     test_loss, test_acc = model.evaluate(x_test,  y_test, verbose=2)
 
+
+def convertToMono(file): 
+    sound = AudioSegment.from_wav( file )
+    sound = sound.set_channels(1)
+    sound.export(file, format="wav")    
+
+def getMelSpectrogram(file):
+    y, sr = librosa.load(file)
+    n_fft = 2048
+
+    mel_spect = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft, hop_length=32)
+    mel_spect_dB = librosa.power_to_db(mel_spect, ref=np.max)
+    librosa.display.specshow(mel_spect_dB)
+    plt.plot(y)
+    plt.savefig( "./audio.jpg", pil_kwargs={'progressive': True})
+    return True
+
 def getSpectrogram( file ):
     wav_file = wave.open( file )
-    frameRate = wav_file.getframerate()
-    totalFrames = wav_file.getnframes()
-    #get first three seconds or entire file, whichever is shorter
-    framesToGet = min( frameRate * 3, totalFrames) 
-    audio = wav_file.readframes( framesToGet )
-    isMono = ( wav_file.getnchannels == 1 )
+    isMono = wav_file.getnchannels()
     wav_file.close()
 
     #can only use one channel 
-    if not isMono:
-        return False
-    
-    frequencies, times, spectrogram = signal.spectrogram( audio, frameRate )
-    plt.imshow( spectrogram )
-    plt.savefig( "./audio.jpg", progressive=True)
-    return True
+    if isMono != 1:
+        convertToMono( file )
 
+    wav_file = wave.open( file )
+    params = wav_file.getparams()
+    sampleRate = params[2]
+    totalFrames = params[3]
+    #gets 3 seconds (or less) of the audio
+    framesToRead = min( sampleRate * 3, totalFrames )
+    data = wav_file.readframes( framesToRead )
+    wav_file.close()
 
-
+    #writes 3 seconds (or less) of the submitted audio
+    wav_file = wave.open( "./audio.wav", 'wb')
+    params = list( params )
+    params[3] = framesToRead
+    params = tuple( params )
+    wav_file.setparams( params )
+    wav_file.writeframes( data )
+    return getMelSpectrogram("./audio.wav")
 
 if __name__ == "__main__":
     main()
