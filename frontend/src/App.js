@@ -33,6 +33,8 @@ function App() {
   const [stage, setStage] = useState(0); // 0 FOR NO UPLOAD, 1 FOR UPLOAD, 2 FOR RESULT
   const [COVIDFree, setCOVID] = useState(false);
   const [progress, setProgress] = useState(10);
+  const [confidence, setConfidence] = useState(0);
+  const [result, setResult] = useState("");
 
   console.log(COVIDFree)
   return (
@@ -48,10 +50,24 @@ function App() {
           <div id="appDiv"> 
 
           {/* We need a for loop to constantly fetch the back end for progress */}
-          <input type="file" onChange={() => { 
-            setStage((prevStage) => prevStage + 1) 
+          <input type="file" onChange={(e) => { 
+            setStage(1) 
+            setProgress(10);
+            let name = e.target.name;
+            let value = e.target.files[0];
+            let formData = new FormData();
+            formData.append(name, value);
+            fetch("/prediction", {
+              method: "POST",
+              body: formData,
+            }).then((res) => res.json())
+            .then((result) => {
+                setResult(result["result"]);
+                setConfidence(result["confidence"])
+            }).catch((err) => alert(err));
             const timer = setInterval(() => {
               let currProgress = 0;
+              
               setProgress((prevProgress) => { 
                 if (prevProgress < 100)
                   currProgress = prevProgress + 10
@@ -60,7 +76,7 @@ function App() {
               });
               if (currProgress === 100){ 
                 setCOVID(true);
-                setStage((prevStage) => prevStage + 1);
+                setStage(2);
                 clearInterval(timer);
               }
             }, 800);
@@ -76,7 +92,7 @@ function App() {
           </IconButton>
           </div>                    
           { (stage === 1) && <LinearProgressionWithLabel value={progress}/> }   
-          { (stage === 2) && <Results COVIDFree={COVIDFree}/>}
+          { (stage === 2) && <Results COVIDFree={(result === "positive") ? false : true} confidence={confidence}/>}
           </Paper>
         </form>
         

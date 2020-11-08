@@ -13,6 +13,8 @@ import librosa
 import librosa.display
 from pydub import AudioSegment
 
+output_model_name = "finalized_model_c"
+
 EPOCHS = 10 # how many times to train
 
 #Input Size
@@ -33,6 +35,7 @@ def main():
     labels = np.array(labels)
 
     images = images.reshape(images.shape[0], images.shape[1], images.shape[2], 1)
+    print(images.shape)
     X_train, X_test, Y_train, Y_test = train_test_split(images, labels, test_size=0.2)
     # print(X_train.shape)
     # print(Y_train.shape)
@@ -88,7 +91,7 @@ def build_model(n_labels):
     INPUTSHAPE = (HEIGHT, WIDTH, 1)
     model = models.Sequential([
         layers.MaxPool2D((2,2), input_shape=INPUTSHAPE),
-        layers.Conv2D(16, (5,5), padding='same', activation='relu'),
+        layers.Conv2D(16, (5,5), padding='same', activation='relu', input_shape=INPUTSHAPE),
         layers.Conv2D(16, (5,5), padding='same', activation='relu'),
         layers.MaxPool2D((2,2)),
         layers.Dropout(0.2),
@@ -97,12 +100,12 @@ def build_model(n_labels):
         layers.MaxPool2D((2,2)),
         layers.Dropout(0.2),
         layers.Flatten(),
-        layers.Dropout(0.5),
+        layers.Dropout(0.3),
         layers.Dense(256, activation='relu'),
         layers.Dense(n_labels, activation = 'softmax')
     ])
 
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     print(model.summary())
     return model
 
@@ -119,7 +122,7 @@ def train_model(model, x_test, y_test, x_train, y_train):
     test_loss, test_acc = model.evaluate(x_test,  y_test, verbose=2)
 
     # Serialize the model to be able to use quicker for single-sample identification
-    model.save("finalized_model")
+    model.save(output_model_name)
 
 if __name__ == "__main__":
     main()

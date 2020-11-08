@@ -41,8 +41,10 @@ def rotate_and_save_img(img, img_name, pts1, pts2):
     # Save image in output directory
     if (img_name[0:8] == "positive"): #infer output directory
         dir_out = POS_DIR_OUT
-    else:
+    elif (img_name[0:8] == "negative"):
         dir_out = NEG_DIR_OUT
+    else:
+        dir_out = os.curdir
 
     cv2.imwrite(os.path.join(dir_out, img_name), dst, [cv2.IMWRITE_JPEG_QUALITY, 100]) # Save the image
     return

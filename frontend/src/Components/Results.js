@@ -22,19 +22,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const joy = "Congrats! You are COVIDFree";
-const death = "You have COVID YOU WILL DIE"; 
-function Results({ COVIDFree }){
+var joy = "Congrats! You are COVIDFree";
+var death = "You have COVID YOU WILL DIE"; 
+function Results({ COVIDFree, confidence }){
     const classes = useStyles();
     const [result, setResult] = useState("");
-    
+    const chance = " with a " + confidence + "% chance"; 
     useEffect(() => {
         setResult(() => (COVIDFree) && joy || death);
     }, [COVIDFree]);
     
     return (
     <div className={classes.resultsContainer}>
-        <Typography className={classes.resultsText} variant="h3" component="div">{result}</Typography> 
+        <Typography className={classes.resultsText} variant="h3" component="div">{result + chance}</Typography> 
          {(COVIDFree) && <EmojiEmotionsIcon/>
           || <InsertEmoticonIcon/>}
         <div>
