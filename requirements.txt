@@ -9,4 +9,3 @@ librosa
 pydub
 wave
 gunicorn
-pickle

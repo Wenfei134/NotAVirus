@@ -1,2 +1,2 @@
 #!usr/bin/bash/env
-source ./NotAVirus/bin/activate
+source ./NotAVirus/Scripts/activate

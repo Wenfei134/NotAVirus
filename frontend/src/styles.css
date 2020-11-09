@@ -30,7 +30,8 @@ a, button, .logo {
 }
 
 .header{
-    position: fixed;
+    position: relative;
+    top: 0px;
     width: 100%;
     padding: 1em;
     background-color: var(--dark);

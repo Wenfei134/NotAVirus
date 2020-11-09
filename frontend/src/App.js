@@ -1,4 +1,11 @@
-import React, {useEffect, useState, useReducer} from "react";
+/**
+ * Author: Harris Zheng
+ * Date: November 9th, 2020
+ * Description: Front-End React App to Display COVID Results.
+ */
+
+
+import React, {useEffect, useState, useReducer, useCallback, useMemo} from "react";
 import Hello from "./Components/Hello";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -14,12 +21,13 @@ import './styles.css';
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
-    paddingTop: "10%",
+    paddingTop: "50px"
   },
   contentContainer: {
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
+    minWidth: "300px",
     "& > #appDiv" : {
       marginTop: "10px"
     } 
@@ -31,12 +39,49 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   const [stage, setStage] = useState(0); // 0 FOR NO UPLOAD, 1 FOR UPLOAD, 2 FOR RESULT
-  const [COVIDFree, setCOVID] = useState(false);
-  const [progress, setProgress] = useState(10);
+  const [progress, setProgress] = useState(10); // Progress bar values
   const [confidence, setConfidence] = useState(0);
   const [result, setResult] = useState("");
+  
+  console.log(result);
+  const submitFile = useCallback((e) => { 
+    /* STAGE 1 */
+    setStage(1) 
+    setProgress(10);
 
-  console.log(COVIDFree)
+    let name = e.target.name;
+    let value = e.target.files[0];
+    let formData = new FormData();
+    formData.append(name, value);
+    fetch("/prediction", {
+      method: "POST",
+      body: formData,
+    }).then((res) => res.json())
+    .then((result) => {
+        setResult(result["result"]);
+        setConfidence(result["confidence"])
+    }).catch((err) => alert(err));
+
+    const timer = setInterval(() => {
+      let currProgress = 0;
+      
+      setProgress((prevProgress) => { 
+        if (prevProgress < 100)
+          currProgress = prevProgress + 10
+        else return prevProgress 
+        return currProgress
+      });
+      if (currProgress === 100){ 
+        setStage(2);
+        clearInterval(timer);
+      }
+    }, 800);
+    return () => {
+      clearInterval(timer);
+    };
+  });
+
+  console.log(result);
   return (
   <React.Fragment>
     <div class="header">
@@ -50,40 +95,7 @@ function App() {
           <div id="appDiv"> 
 
           {/* We need a for loop to constantly fetch the back end for progress */}
-          <input type="file" onChange={(e) => { 
-            setStage(1) 
-            setProgress(10);
-            let name = e.target.name;
-            let value = e.target.files[0];
-            let formData = new FormData();
-            formData.append(name, value);
-            fetch("/prediction", {
-              method: "POST",
-              body: formData,
-            }).then((res) => res.json())
-            .then((result) => {
-                setResult(result["result"]);
-                setConfidence(result["confidence"])
-            }).catch((err) => alert(err));
-            const timer = setInterval(() => {
-              let currProgress = 0;
-              
-              setProgress((prevProgress) => { 
-                if (prevProgress < 100)
-                  currProgress = prevProgress + 10
-                else return prevProgress 
-                return currProgress
-              });
-              if (currProgress === 100){ 
-                setCOVID(true);
-                setStage(2);
-                clearInterval(timer);
-              }
-            }, 800);
-            return () => {
-              clearInterval(timer);
-            };
-          } } className={classes.input} name="audiofile" id="contained-button-file" accept=".wav"/>
+          <input type="file" onChange={submitFile} className={classes.input} name="audiofile" id="contained-button-file" accept=".wav"/>
           <label htmlFor="contained-button-file">
             <Button variant="contained" color="primary" component="span">Upload Audio</Button>  
           </label>          

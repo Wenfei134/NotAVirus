@@ -27,7 +27,7 @@ var death = "You have COVID YOU WILL DIE";
 function Results({ COVIDFree, confidence }){
     const classes = useStyles();
     const [result, setResult] = useState("");
-    const chance = " with a " + confidence + "% chance"; 
+    const chance = " with a " + confidence.toFixed(2) + "% chance"; 
     useEffect(() => {
         setResult(() => (COVIDFree) && joy || death);
     }, [COVIDFree]);
