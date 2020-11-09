@@ -43,8 +43,6 @@ a, button, .logo {
 #homepage{
     height: 100vh; 
     width: 100%;
-    display: grid;
-    grid-template-columns: minmax( 60px, 1fr) repeat(6, minmax(50px, 190px)) minmax(60px, 1fr);
     color: var(--light);
     background: 
         linear-gradient(
@@ -54,20 +52,6 @@ a, button, .logo {
         url(https://www.brookings.edu/wp-content/uploads/2020/04/AdobeStock_332298426.jpeg)
         no-repeat
         55% 40%;
-}
-
-.right{
-    grid-column: 2 / span 3;
-    display: flex;
-    flex-direction: column;
-}
-
-.right :first-child {
-    margin-top: auto;
-}
-
-.right :last-child{
-    margin-bottom: auto;
 }
 
 
