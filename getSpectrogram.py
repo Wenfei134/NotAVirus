@@ -50,13 +50,13 @@ def getMelSpectrogramOld(file):
 
     librosa.display.specshow(mel_spect_dB)
     plt.plot(y)
-    plt.savefig( "./audio.jpg", pil_kwargs={'progressive': True}, bbox_inches='tight', pad_inches=0)
+    plt.savefig( "./testFiles/audio.jpg", pil_kwargs={'progressive': True}, bbox_inches='tight', pad_inches=0)
     return True 
 
 # define a function which returns an image as numpy array from figure
 def get_img_from_fig(fig, dpi=10):
     buf = io.BytesIO()
-    plt.savefig( "./audio.jpg", pil_kwargs={'progressive': True}, bbox_inches='tight', pad_inches=0)
+    plt.savefig( "./testFiles/audio.jpg", pil_kwargs={'progressive': True}, bbox_inches='tight', pad_inches=0)
     fig.savefig(buf, format="png", dpi=dpi)
     buf.seek(0)
     img_arr = np.frombuffer(buf.getvalue(), dtype=np.uint8)

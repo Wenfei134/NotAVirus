@@ -38,8 +38,8 @@ function Results({ COVIDFree, confidence }){
          {(COVIDFree) && <EmojiEmotionsIcon/>
           || <InsertEmoticonIcon/>}
         <div>
-        <FacebookShareButton url="facebook.com" quote={result} hashtag="mycovidresults"><FacebookIcon size={32} round={true}></FacebookIcon></FacebookShareButton>
-        <LinkedinShareButton url="linkedin.ca" title={"My Covid Results"} summary={"result"} source={""}><LinkedinIcon size={32} round={true}></LinkedinIcon></LinkedinShareButton>
+        <FacebookShareButton url="facebook.com" quote={result + chance} hashtag="mycovidresults"><FacebookIcon size={32} round={true}></FacebookIcon></FacebookShareButton>
+        <LinkedinShareButton url="linkedin.ca" title={"My Covid Results"} summary={result + chance} source={"linkedin.ca"}><LinkedinIcon size={32} round={true}></LinkedinIcon></LinkedinShareButton>
         <TwitterShareButton url="twitter.com" title={"My Covid Results"} via={"myself"} hashtags={["mycovidresults", "awesome"]}><TwitterIcon size={32} round={true}></TwitterIcon></TwitterShareButton>
         </div> 
     </div>

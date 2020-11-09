@@ -16,11 +16,10 @@ def home():
 def prediction():  
     if request.method == 'POST': 
         file = request.files['audiofile']
-        print(file)
-        filename = file.filename
-        path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save( path )
         melSpec = submitAudio( path )
+        os.remove(path)
         results = ci.classify_image(melSpec)
         # if melSpec not None: 
         #     prediction = getPrediction( './audio.jpg')

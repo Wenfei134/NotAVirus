@@ -82,7 +82,7 @@ def load_images(pos_dir, neg_dir):
 
     return (images, labels) #numpy arrays
 
-
+def visualize_filters():
 
 def build_model(n_labels):
     """
